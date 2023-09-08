@@ -48,7 +48,11 @@ icon: getIcon('eva:image-fill')
     path: '/dashboard/banners',
     icon: getIcon('eva:image-fill'),
   },
-
+  {
+    title: 'mobile banners',
+    path: '/dashboard/mobilebanners',
+    icon: getIcon('eva:image-fill'),
+  },
   {
     title: 'Enquiries',
     path: '/dashboard/enquiries',

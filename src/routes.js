@@ -12,6 +12,7 @@ import Category from './pages/Category';
 import Brands from './pages/Brands';
 import ProtectedRoute from './utils/ProtectedRoute';
 import Banners from './pages/Banners';
+import MobileBanners from './pages/MobileBanners';
 import AvailableDoctors from './pages/AvailableDoctors';
 import Enquiry from "./pages/Enquiry"
 import WholesaleEnquiry from "./pages/WholesaleEnquiry"
@@ -39,6 +40,7 @@ export default function Router() {
      <Route path="/dashboard/categories" element={ <DashboardLayout Component={<Category/>} />} />
      <Route path="/dashboard/brands" element={ <DashboardLayout Component={<Brands/>} />} />
      <Route path="/dashboard/banners" element={ <DashboardLayout Component={<Banners/>} />} />
+     <Route path="/dashboard/mobilebanners" element={ <DashboardLayout Component={<MobileBanners/>} />} />
    
       </Route>
        <Route exact path="/login" element={<LogoOnlyLayout Component={<Login/>} />   } />
