@@ -192,7 +192,7 @@ function AddBrand({ handleClose }) {
     console.log("NEW MAIN CATEGORY DATA", addData);
     await axios
       .post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/create/maincategory`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/add/brand`,
         { ...addData },
         { withCredentials: true }
       )
