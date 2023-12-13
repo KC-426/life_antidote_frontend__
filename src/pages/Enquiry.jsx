@@ -134,12 +134,12 @@ const headCells = [
     disablePadding: false,
     label: "Phone Number",
   },
-  {
-    id: "pro_code",
-    numeric: true,
-    disablePadding: true,
-    label: "Product CODE",
-  },
+  // {
+  //   id: "pro_code",
+  //   numeric: true,
+  //   disablePadding: true,
+  //   label: "Product CODE",
+  // },
   {
     id: "product_name",
     numeric: true,
@@ -665,6 +665,8 @@ export default function EnhancedTable() {
     }
   };
 
+  console.log("minData======>>>",minData);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -1001,14 +1003,14 @@ export default function EnhancedTable() {
                             {row?.name}
                           </TableCell>
                           <TableCell align="center">{row?.phone_no} </TableCell>
-                          <TableCell
+                          {/* <TableCell
                             align="center"
                             style={{ textTransform: "capitalize" }}
                           >
                             {row?.product_detail?.product_code}
-                          </TableCell>
+                          </TableCell> */}
 
-                          <TableCell align="center">{row?.product_detail?.product_name}</TableCell>
+                          <TableCell align="center">{row?.medicine}</TableCell>
                           <TableCell align="center">
                             {/* {new Date(row?.product_detail?.createdAt).getDate()}
                             /

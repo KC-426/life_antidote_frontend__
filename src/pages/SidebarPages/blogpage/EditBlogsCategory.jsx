@@ -20,7 +20,7 @@ import palette from "../../../theme/palette";
 import ConfimModal from "../../../global/Modals/ConfimModal";
 import CustomizedSnackbars from "../../../global/Snackbar/CustomSnackbar";
 
-function AddBrand({ handleClose }) {
+function EditBlogsCategory({ handleClose }) {
   const [fileUpload, setFileUpload] = useState(null);
   const [mainCategory, setMainCategory] = useState([]);
   const [searchMainCategory, setSearchMainCategory] = useState("");
@@ -46,11 +46,11 @@ function AddBrand({ handleClose }) {
   useEffect(() => {
     axios
       .get(
-        `${process.env.REACT_APP_BACKEND_URL}/api/brands/get/addproduct/maincategory`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/blogs/category/get/addproduct/maincategory`,
         { withCredentials: true }
       )
       .then((res) => {
-        console.log(res);
+        console.log("blogs/category/",res);
         setMainCategory(res?.data);
       })
       .catch((err) => {
@@ -100,7 +100,7 @@ function AddBrand({ handleClose }) {
     );
     await axios
       .patch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/brands/delete/main/category/image/?old_main_category_name=${userselectedCategory?.main_Catgeory}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/blogs/category/delete/main/category/image/?old_main_category_name=${userselectedCategory?.main_Catgeory}`,
         { withCredentials: true }
       )
       .then((res) => {
@@ -146,7 +146,7 @@ function AddBrand({ handleClose }) {
     };
     await axios
       .patch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/brands/update/all/main/category/?old_main_category_name=${userselectedCategory?.main_Catgeory}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/blogs/category/update/all/main/category/?old_main_category_name=${userselectedCategory?.main_Catgeory}`,
         { ...data },
         { withCredentials: true }
       )
@@ -192,7 +192,7 @@ function AddBrand({ handleClose }) {
     console.log("NEW MAIN CATEGORY DATA", addData);
     await axios
       .post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/brands/create/maincategory`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/blogs/category/create/maincategory`,
         { ...addData },
         { withCredentials: true }
       )
@@ -231,8 +231,8 @@ function AddBrand({ handleClose }) {
       </div>
       <Container maxWidth="md">
         <div className="add-category-pad-top-bot">
-          <h2>Create or Edit Brands</h2>
-          <p> Create and Edit your Brands from here</p>
+          <h2>Create or Edit Blog Categories</h2>
+          <p> Create and Edit your Blog Categories from here</p>
         </div>
 
         {/*============ CONFIRM MODAL ============ */}
@@ -251,7 +251,7 @@ function AddBrand({ handleClose }) {
           {/* ======================= MAIN CATEGORY SELECTION BOX ===================== */}
           <div className="main-edit-category-list">
             <div style={{ paddingBottom: 5 }}>
-              <h4>Add a New Brand</h4>
+              <h4>Add a New Blog Category</h4>
             </div>
             {/* <label htmlFor="">Main Category  </label> */}
             <div className="flex" style={{ paddingBottom: 10 }}>
@@ -261,7 +261,7 @@ function AddBrand({ handleClose }) {
                 id="outlined-basic"
                 value={addMainCategory}
                 onChange={(e) => setAddMainCategory(e.target.value)}
-                placeholder="Brand Name "
+                placeholder="Blog Category Name "
                 variant="outlined"
               />
               <Button
@@ -275,7 +275,7 @@ function AddBrand({ handleClose }) {
               </Button>
             </div>
             <div style={{ paddingBottom: 5, paddingTop: 10 }}>
-              <h4>Edit or Modify Your Brands</h4>
+              <h4>Edit or Modify Your Blog Categories</h4>
             </div>
 
             <div className="category-single-search">
@@ -285,7 +285,7 @@ function AddBrand({ handleClose }) {
                 value={searchMainCategory}
                 onChange={(e) => setSearchMainCategory(e.target.value)}
                 type="search"
-                placeholder="Search In Brands..."
+                placeholder="Search In Blog Categories..."
                 variant="outlined"
                 InputProps={{
                   startAdornment: (
@@ -366,9 +366,6 @@ function AddBrand({ handleClose }) {
                 <img
                   className="edit-main-category-image"
                   alt="product"
-                  //  src={ fileUpload ? URL.createObjectURL(fileUpload) :
-                  //   noImage
-                  //  }
                   src={
                     newMainCategory?.image?.image_url
                       ? newMainCategory?.image?.image_url
@@ -394,7 +391,7 @@ function AddBrand({ handleClose }) {
                 </Button>
               </div>
               <h4 style={{ paddingBottom: 4, paddingTop: 22 }}>
-                Change Brand Name{" "}
+                Change Blog Category Name{" "}
               </h4>
               {/* <label style={{padding:"4px 0px"}} >Main Category  </label> */}
               <TextField
@@ -448,4 +445,4 @@ function AddBrand({ handleClose }) {
   );
 }
 
-export default AddBrand;
+export default EditBlogsCategory;

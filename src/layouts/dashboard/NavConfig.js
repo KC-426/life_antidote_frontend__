@@ -66,11 +66,21 @@ icon: getIcon('eva:image-fill')
 
 
   
-  // {
-  //   title: 'blog',
-  //   path: '/dashboard/blog',
-  //   icon: getIcon('eva:file-text-fill'),
-  // },
+  {
+    title: 'blog categories',
+    path: '/dashboard/blogs_categories',
+    icon: getIcon('eva:file-text-fill'),
+  },
+  {
+    title: 'blogs',
+    path: '/dashboard/blogs',
+    icon: getIcon('eva:file-text-fill'),
+  },
+  {
+    title: 'faqs',
+    path: '/dashboard/faqs',
+    icon: getIcon('eva:file-text-fill'),
+  },
 
 ];
 

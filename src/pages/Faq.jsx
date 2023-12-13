@@ -60,6 +60,8 @@ import CustomizedSnackbars from "../global/Snackbar/CustomSnackbar";
 import ConfimModal from "../global/Modals/ConfimModal";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import AddBrand from "./SidebarPages/brandpage/AddBrand";
+import AddFaq from "./SidebarPages/faqPage/AddFaq";
+import EditFaq from "./SidebarPages/faqPage/EditFaq";
 
 function createData(name, calories, fat, carbs, protein, amount, status) {
   return {
@@ -121,23 +123,18 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "image",
-    numeric: false,
-    disablePadding: true,
-    label: "Image",
-  },
-  {
-    id: "Brand_Name",
+    id: "title",
     numeric: true,
     disablePadding: false,
-    label: "Brand Name",
+    label: "Faq Title",
   },
-//   {
-//     id: "Category",
-//     numeric: true,
-//     disablePadding: false,
-//     label: "Category ",
-//   },
+  {
+    id: "description",
+    numeric: true,
+    disablePadding: false,
+    label: "Description ",
+  },
+
 
 //   {
 //     id: "sub_category",
@@ -145,12 +142,12 @@ const headCells = [
 //     disablePadding: false,
 //     label: "Sub Category",
 //   },
-//   {
-//     id: "Edit",
-//     numeric: true,
-//     disablePadding: false,
-//     label: "Edit",
-//   },
+  {
+    id: "View",
+    numeric: true,
+    disablePadding: false,
+    label: "View",
+  },
 ];
 
 function EnhancedTableHead(props) {
@@ -231,7 +228,7 @@ const EnhancedTableToolbar = (props) => {
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
             alpha(
-              theme.palette.primary.main,
+            //   theme.palette.primary.main,
               theme.palette.action.activatedOpacity
             ),
         }),
@@ -253,7 +250,7 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          All Brands {`(${props.countCategory})`}
+          All Faqs 
         </Typography>
       )}
 
@@ -296,7 +293,7 @@ const EnhancedTableToolbar = (props) => {
                       />
                     </ListItemIcon>
                     <ListItemText
-                      primary="Delete Brands"
+                      primary="Delete Blogs"
                       primaryTypographyProps={{ variant: "body2" }}
                     />
                   </MenuItem>
@@ -314,7 +311,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable() {
+export default function Faq() {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -332,7 +329,7 @@ export default function EnhancedTable() {
   const [age, setAge] = React.useState("");
   const [data, setData] = useState([]);
   const [countCategory, setCountCategory] = useState();
-  const [categoryIdForEdit, setCategoryIdForEdit] = useState("");
+  const [blogIdForEdit, setBlogIdForEdit] = useState({});
   const [mainCategoryForFilter, setMainCategoryForFilter] = useState([]);
   const [filterMainCategory, setFilterMainCategory] = useState("all");
   const [loading, setLoading] = useState(false);
@@ -344,25 +341,23 @@ export default function EnhancedTable() {
 
   console.log("SELECTED-->", selected);
 
-  // console.log("MAIN CATEGORY ERROR ===",categoryIdForEdit)
+  // console.log("MAIN CATEGORY ERROR ===",blogIdForEdit)
   // GET ALL CATEGORIES
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/api/brands/get/all/category`, {
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/get_faq`, {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res);
-        setData(res.data?.all_categories);
-        setCountCategory(res.data?.countCategory || 0);
-        setMainCategoryForFilter(res.data?.categoryForFilter);
+        console.log("data ->>",res);
+        setData(res.data.faqs);
         setLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [drawerAddCategory, drawerEditCategory, render]);
+  }, [render]);
 
   // useEffect(()=>{
 
@@ -374,7 +369,7 @@ export default function EnhancedTable() {
     setLoading(true);
     axios
       .get(
-        `${process.env.REACT_APP_BACKEND_URL}/api/brands/search/in/category?search=${search}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/search/in/category?search=${search}`,
         { withCredentials: true }
       )
       .then((res) => {
@@ -388,30 +383,7 @@ export default function EnhancedTable() {
       });
   };
 
-  // Filter by main category handle chnage
-  const handleFilterByMainCategory = async (e) => {
-    setFilterMainCategory(e.target.value);
-    if (e.target.value == "all") {
-      setRender((prev) => !prev);
-      return;
-    }
-    setLoading(true);
-    await axios
-      .get(
-        `${process.env.REACT_APP_BACKEND_URL}/api/brands/filter/category?main_category=${e.target.value}`,
-        { withCredentials: true }
-      )
-      .then((res) => {
-        console.log(res);
-        setData(res.data);
-        setCountCategory(res.data?.length || 0);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
+  
   const handleChange = (event) => {
     setAge(event.target.value);
   };
@@ -518,7 +490,7 @@ export default function EnhancedTable() {
     console.log("VALUE FOR DELETE=>", value);
     await axios
       .delete(
-        `${process.env.REACT_APP_BACKEND_URL}/api/brands/delete/category`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/delete/blogs`,
         { data: value },
         { withCredentials: true }
       )
@@ -530,7 +502,7 @@ export default function EnhancedTable() {
           setMessage((prev) => ({
             ...prev,
             type: "success",
-            message: "Brands Deleted Successfully !",
+            message: "Blogs Deleted Successfully !",
           }));
           setSnackbarOpen(true);
           setFilterMainCategory("all");
@@ -590,9 +562,9 @@ export default function EnhancedTable() {
         toggleDrawerClose={handleCloseEditCategorySideBar}
         toggleDrawerOpen={handleOpenEditCategorySidebar}
         ComponentData={
-          <EditCategory
+          <EditFaq
             handleClose={handleCloseEditCategorySideBar}
-            mainCategoryId={categoryIdForEdit}
+            blogIdForEdit={blogIdForEdit}
           />
         }
       />
@@ -602,7 +574,7 @@ export default function EnhancedTable() {
           {/* <Skeleton variant="rectangular"  height={118} animation="" /> */}
           <Paper elevation={3} sx={{ width: "100%", mb: 2, borderRadius: 1 }}>
             <div className="category-topbar-box ">
-              <h3 className=""> Brands</h3>
+              <h3 className=""> Faqs</h3>
               {/* <Button variant="contained"  startIcon={<Iconify icon="eva:plus-fill" />}> 
      Add Category
          </Button> */}
@@ -634,14 +606,14 @@ export default function EnhancedTable() {
                   toggleDrawerClose={handleCloseAddCategorySideBar}
                   toggleDrawerOpen={handleOpenAddCategorySidebar}
                   ComponentData={
-                    <AddBrand handleClose={handleCloseAddCategorySideBar} />
+                    <AddFaq handleClose={handleCloseAddCategorySideBar} />
                   }
                   ComponentButton={
                     <Button
                       variant="contained"
                       startIcon={<Iconify icon="eva:plus-fill" />}
                     >
-                      Add or edit Brands
+                      Add New Faq
                     </Button>
                   }
                 />
@@ -658,7 +630,7 @@ export default function EnhancedTable() {
             />
             {/* CONFIRM MODAL */}
             <div className="flex flex-justify-between order-top-bar ">
-              <form
+              {/* <form
                 onSubmit={handleSearch}
                 className="flex"
                 style={{ width: "100%" }}
@@ -669,7 +641,7 @@ export default function EnhancedTable() {
                   fullWidth
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  label="Search In Brands"
+                  label="Search In Blogs"
                   placeholder="Search Anything..."
                   variant="outlined"
                   InputProps={{
@@ -682,24 +654,22 @@ export default function EnhancedTable() {
                 />
                 <Button
                   className="search-btn"
-                  sx={{ mx: 2, height: 54, px: 5 }}
+                  sx={{ ml: 2, height: 54, px: 5 }}
                   type="submit"
                   variant="contained"
                 >
                   Search
                 </Button>
-              </form>
-              {/* <div style={{width:"60%"}} ></div>
-   <div style={{width:"60%"}} ></div> */}
-              <div className=" order-toolbar-selectbox-1">
+              </form> */}
+
+              {/* <div className=" order-toolbar-selectbox-1">
                 <FormControl fullWidth>
-                  {/* <InputLabel id="demo-select-main-category">Filter By Main Category</InputLabel> */}
                   <TextField
                     labelId="demo-select-main-category"
                     id="demo-select-main-category"
                     select
                     value={filterMainCategory}
-                    label="Filter By Brands"
+                    label="Filter By Blogs"
                     onChange={(e) => handleFilterByMainCategory(e)}
                     style={{ textTransform: "capitalize" }}
                     SelectProps={{
@@ -721,9 +691,7 @@ export default function EnhancedTable() {
                       ),
                     }}
                   >
-                    {/* <MenuItem value="" selected >
-          <em>Status</em>
-        </MenuItem> */}
+
                     <MenuItem value="all">All</MenuItem>
                     {mainCategoryForFilter.map((item) => (
                       <MenuItem
@@ -734,12 +702,9 @@ export default function EnhancedTable() {
                         {item._id}
                       </MenuItem>
                     ))}
-                    {/* <MenuItem value={10}>Processing</MenuItem>
-        <MenuItem value={20}>Delivered</MenuItem>
-        <MenuItem value={30}>Cancel</MenuItem> */}
                   </TextField>
                 </FormControl>
-              </div>
+              </div> */}
             </div>
           </Paper>
 
@@ -768,8 +733,8 @@ export default function EnhancedTable() {
                   {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
                   {stableSort(data, getComparator(order, orderBy))
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => {
+                    ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    ?.map((row, index) => {
                       const isItemSelected = isSelected(row._id);
                       const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -792,75 +757,32 @@ export default function EnhancedTable() {
                               }}
                             />
                           </TableCell>
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                            align="left"
-                          >
-                            {/* <Avatar alt="Remy Sharp" src={row?.category_image ? `${row.category_image.image_url}` :"" } /> */}
-                            <img
-                              className="category-table-image"
-                              alt="product"
-                              src={
-                                row?.main_category_image
-                                  ? `${row?.main_category_image?.image_url}`
-                                  : noImage
-                              }
-                            />
-                          </TableCell>
+                     
                           <TableCell
                             style={{ textTransform: "capitalize" }}
                             align="left"
                           >
-                            {row.main_category_name}
+                            {row.title}
                           </TableCell>
+                          
                           <TableCell
                             style={{ textTransform: "capitalize" }}
                             align="left"
                           >
-                            {row.category_name}
+                           { row.description}
                           </TableCell>
-                          <TableCell
-                            style={{ textTransform: "capitalize" }}
-                            align="left"
-                          >
-                            <div className="sub-category-table-flex">
-                              {row.subcategory.map(
-                                (value, index) =>
-                                  index < 3 && (
-                                    <p
-                                      className="sub-category-style"
-                                      key={value.name}
-                                    >
-                                      {value.name?.slice(0, 12) + ".."}
-                                    </p>
-                                  )
-                              )}
-                            </div>
-                          </TableCell>
+                        
+                         
                           <TableCell align="left">
-                            {/* <ModeEditOutlinedIcon fontSize='small' /> */}
-
-                            {/*################ EDIT CATEGORY SIDEBAR BUTTON ################*/}
                             <div className="flex-justify-start">
-                              {/* <SideDrawer state={drawerEditCategory} toggleDrawerClose={handleCloseEditCategorySideBar} toggleDrawerOpen={handleOpenEditCategorySidebar}
-           ComponentData={<EditCategory handleClose={handleCloseEditCategorySideBar} mainCategoryId={categoryIdForEdit} />}
-           ComponentButton={ <VisibilityOutlinedIcon style={{cursor:"pointer"}} onClick={()=>setCategoryIdForEdit(row._id)} fontSize='small' />} /> */}
-                              {/*################ EDIT CATEGORY SIDEBAR BUTTON ################*/}
-
-                              {row.category_name && (
                                 <AppRegistrationIcon
                                   style={{ cursor: "pointer" }}
                                   fontSize="small"
                                   onClick={() => {
-                                    setCategoryIdForEdit(row._id);
+                                    setBlogIdForEdit(row);
                                     setDrawerEditCategory(true);
                                   }}
                                 />
-                              )}
-                              {/* <DeleteOutlineOutlinedIcon fontSize='small' /> */}
                             </div>
                           </TableCell>
                         </TableRow>
@@ -880,7 +802,7 @@ export default function EnhancedTable() {
                           id="tableTitle"
                           component="div"
                         >
-                          Brands Not Found...
+                          Blogs Not Found...
                         </Typography>
                       </div>{" "}
                     </TableCell>
@@ -913,7 +835,17 @@ export default function EnhancedTable() {
   );
 }
 
-{
-  /* <CustomModel modalWidth='50%'  open={openaddcategory}  data={<Addcategory handleonclosecategory={closeaddcategory} />} />
-  <CustomModel modalWidth='auto' data={<EditCategoryModal handleonclose={closeeditmodal}/>} open={openeditmodal} /> */
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

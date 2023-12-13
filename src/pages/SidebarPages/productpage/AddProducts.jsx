@@ -16,6 +16,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import Backdrop from "@mui/material/Backdrop";
 import CancelIcon from "@mui/icons-material/Cancel";
 
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
 function AddProducts({ handleClose }) {
   const [productData, setProductData] = useState({
     product_main_category: "choose_main_category",
@@ -31,6 +34,7 @@ function AddProducts({ handleClose }) {
   const [fileUpload, setFileUpload] = useState();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [render, setRender] = useState(false);
+
   console.log("PRODUCT DATA", productData);
 
   //================= GET ALL MAIN CATEGORY =================
@@ -65,12 +69,28 @@ function AddProducts({ handleClose }) {
 
   // GET BRAND
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/api/get/brand`)
+    // axios
+    //   .get(`${process.env.REACT_APP_BACKEND_URL}/api/get/brand`)
+    //   .then((res) => {
+    //     console.log(res);
+    //     setBrand(res?.data?.findBrands);
+    //   });
+
+      axios
+      .get(
+        `${process.env.REACT_APP_BACKEND_URL}/api/brands/get/addproduct/maincategory`,
+        { withCredentials: true }
+      )
       .then((res) => {
-        console.log(res);
-        setBrand(res?.data?.findBrands);
+        console.log("BRANDS===>>",res);
+        setBrand(res?.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
+
+
+
   }, [productData?.product_category]);
   // GET SUB CATEGORY BY BRAND
 
@@ -79,6 +99,11 @@ function AddProducts({ handleClose }) {
     setProductData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const editChangeEditor = (e) => {
+    // console.log(e);
+    setProductData((prev) => ({ ...prev, product_description: e }));
+  };
+console.log("product Data => ", productData);
   // File upload function
   const handleFileUpload = (e) => {
     if (e.target.files?.length > 4)
@@ -107,17 +132,11 @@ function AddProducts({ handleClose }) {
       alert("Add Atleast 1 Product Image !!");
       return;
     }
-    // if(!productData?.product_regular_price ){
-    //   alert("")
-    //   return
-    //   }
-    //   if(!productData?.product_sale_price){
-    //     alert("Regular Price Is Greater Than Sale Price")
-    //   }
-    if (productData?.product_regular_price <= productData?.product_sale_price) {
-      alert("Regular Price Need To Be Greater Than Sale Price !!");
-      return;
-    }
+
+    // if (productData?.product_regular_price <= productData?.product_sale_price) {
+    //   alert("Regular Price Need To Be Greater Than Sale Price !!");
+    //   return;
+    // }
 
     setLoading(true);
     let productsImageToFirebase = [];
@@ -151,6 +170,9 @@ function AddProducts({ handleClose }) {
           product_subcategory: "choose_sub_category",
           product_code: "",
           product_name: "",
+          product_salt: "",
+          meta_title: "",
+          meta_description: "",
           product_variant: "",
           product_quantity: "",
           product_description: "",
@@ -178,6 +200,50 @@ function AddProducts({ handleClose }) {
     setSnackbarOpen(false);
   };
   // ##################### SNACK BAR FUNCTIONs ##################
+
+  // React editor Start
+  const modules = {
+    toolbar: [
+      ["bold", "italic", "underline", "strike"], // toggled buttons
+      ["blockquote", "code-block"],
+
+      [{ header: 1 }, { header: 2 }], // custom button values
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ script: "sub" }, { script: "super" }], // superscript/subscript
+      [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+      [{ direction: "rtl" }], // text direction
+
+      [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+      [{ font: [] }],
+      [{ align: [] }],
+
+      ["clean"],
+    ],
+    clipboard: {
+      matchVisual: false,
+    },
+  };
+
+  const formats = [
+    "header",
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+    "color",
+  ];
+  // React editor End
   return (
     <>
       {/* #################### LOADING SPINNER ######################## */}
@@ -268,6 +334,46 @@ function AddProducts({ handleClose }) {
                     value={productData?.product_name}
                     onChange={handleChange}
                     placeholder=" Product Name "
+                    variant="outlined"
+                  />
+                </div>
+                <div className="add_product_label_input">
+                  <label htmlFor=""> Product Salt </label>
+                  <TextField
+                    required
+                    fullWidth
+                    className="product_form_input"
+                    id="outlined-basic"
+                    name="product_salt"
+                    value={productData?.product_salt}
+                    onChange={handleChange}
+                    placeholder=" Product Salt "
+                    variant="outlined"
+                  />
+                </div>
+                <div className="add_product_label_input">
+                  <label htmlFor=""> Meta Title </label>
+                  <TextField
+                    fullWidth
+                    className="product_form_input"
+                    id="outlined-basic"
+                    name="meta_title"
+                    value={productData?.meta_title}
+                    onChange={handleChange}
+                    placeholder="Meta Title"
+                    variant="outlined"
+                  />
+                </div>
+                <div className="add_product_label_input">
+                  <label htmlFor=""> Meta Description</label>
+                  <TextField
+                    fullWidth
+                    className="product_form_input"
+                    id="outlined-basic"
+                    name="meta_description"
+                    value={productData?.meta_description}
+                    onChange={handleChange}
+                    placeholder=" Meta Description "
                     variant="outlined"
                   />
                 </div>
@@ -406,9 +512,8 @@ function AddProducts({ handleClose }) {
                       },
                     }}
                   >
-                    <MenuItem value="choose_brand">
-                      {/* {data?.main_category_name} */}
-                      {/* choose your brand */}
+                    <MenuItem value="choose_brand" disabled>
+                    Choose Brand
                     </MenuItem>
                     {brand?.map((value, index) => (
                       <MenuItem
@@ -416,8 +521,7 @@ function AddProducts({ handleClose }) {
                         style={{ textTransform: "capitalize" }}
                         value={value?._id}
                       >
-                        {value?.main_category_name}
-                        {value?.name}
+                        {value?._id}
                       </MenuItem>
                     ))}
                   </TextField>
@@ -453,7 +557,7 @@ function AddProducts({ handleClose }) {
                     </div>
                     </div> */}
 
-                <div className="flex" style={{ width: "100%", gap: "10px" }}>
+                {/* <div className="flex" style={{ width: "100%", gap: "10px" }}>
                   <div
                     className="add_product_label_input"
                     style={{ width: "100%" }}
@@ -471,6 +575,7 @@ function AddProducts({ handleClose }) {
                       placeholder=" Regular Price "
                       variant="outlined"
                     />
+
                     <span
                       style={{
                         color: palette.primary.main,
@@ -508,11 +613,11 @@ function AddProducts({ handleClose }) {
                       **Sale price is always less than regular price.
                     </span>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="add_product_label_input">
                   <label htmlFor=""> Description </label>
-                  <TextField
+                  {/* <TextField
                     multiline
                     rows={10}
                     fullWidth
@@ -523,10 +628,21 @@ function AddProducts({ handleClose }) {
                     id="outlined-basic"
                     placeholder=" Add Description "
                     variant="outlined"
+                  /> */}
+                  <ReactQuill
+                    theme="snow"
+                    onChange={(e) => {
+                      console.log(e);
+                      editChangeEditor(e);
+                    }}
+                    value={productData?.product_description}
+                    modules={modules}
+                    formats={formats}
+                    style={{ width: "100%", height: 300, marginBottom: 50 }}
                   />
                 </div>
 
-                <div style={{ paddingTop: 20 }}>
+                <div style={{ paddingTop: 40 }}>
                   <Button
                     variant="outlined"
                     style={{ marginRight: "10px" }}

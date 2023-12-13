@@ -64,8 +64,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         <Logo />
       </Box>
 
-      <Box sx={{ mb: 5, mx: 2.5 }}>
-        {/* <Link underline="none" component={RouterLink} to="#">
+      {/* <Box sx={{ mb: 5, mx: 2.5 }}>
+        <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
            
             <Box sx={{ ml: 2 }}>
@@ -77,8 +77,8 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
               </Typography>
             </Box>
           </AccountStyle>
-        </Link> */}
-      </Box>
+        </Link>
+      </Box> */}
 
       <NavSection navConfig={navConfig} />
 

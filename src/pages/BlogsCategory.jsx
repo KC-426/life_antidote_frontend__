@@ -60,6 +60,7 @@ import CustomizedSnackbars from "../global/Snackbar/CustomSnackbar";
 import ConfimModal from "../global/Modals/ConfimModal";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import AddBrand from "./SidebarPages/brandpage/AddBrand";
+import EditBlogsCategory from "./SidebarPages/blogpage/EditBlogsCategory";
 
 function createData(name, calories, fat, carbs, protein, amount, status) {
   return {
@@ -253,7 +254,7 @@ const EnhancedTableToolbar = (props) => {
           id="tableTitle"
           component="div"
         >
-          All Brands {`(${props.countCategory})`}
+          All Blog Categories {`(${props.countCategory})`}
         </Typography>
       )}
 
@@ -273,7 +274,7 @@ const EnhancedTableToolbar = (props) => {
                   anchorEl={ref2.current}
                   onClose={() => setIsOpen2(false)}
                   PaperProps={{
-                    sx: { width: 200, maxWidth: "100%" },
+                    sx: { width: 230, maxWidth: "100%" },
                   }}
                   anchorOrigin={{ vertical: "top", horizontal: "right" }}
                   transformOrigin={{ vertical: "top", horizontal: "right" }}
@@ -296,7 +297,7 @@ const EnhancedTableToolbar = (props) => {
                       />
                     </ListItemIcon>
                     <ListItemText
-                      primary="Delete Brands"
+                      primary="Delete Blog Categories"
                       primaryTypographyProps={{ variant: "body2" }}
                     />
                   </MenuItem>
@@ -349,7 +350,7 @@ export default function EnhancedTable() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/api/brands/get/all/category`, {
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/blogs/category/get/all/category`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -374,7 +375,7 @@ export default function EnhancedTable() {
     setLoading(true);
     axios
       .get(
-        `${process.env.REACT_APP_BACKEND_URL}/api/brands/search/in/category?search=${search}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/blogs/category/search/in/category?search=${search}`,
         { withCredentials: true }
       )
       .then((res) => {
@@ -398,7 +399,7 @@ export default function EnhancedTable() {
     setLoading(true);
     await axios
       .get(
-        `${process.env.REACT_APP_BACKEND_URL}/api/brands/filter/category?main_category=${e.target.value}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/blogs/category/filter/category?main_category=${e.target.value}`,
         { withCredentials: true }
       )
       .then((res) => {
@@ -518,7 +519,7 @@ export default function EnhancedTable() {
     console.log("VALUE FOR DELETE=>", value);
     await axios
       .delete(
-        `${process.env.REACT_APP_BACKEND_URL}/api/brands/delete/category`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/blogs/category/delete/category`,
         { data: value },
         { withCredentials: true }
       )
@@ -530,7 +531,7 @@ export default function EnhancedTable() {
           setMessage((prev) => ({
             ...prev,
             type: "success",
-            message: "Brands Deleted Successfully !",
+            message: "Blog Category Deleted Successfully !",
           }));
           setSnackbarOpen(true);
           setFilterMainCategory("all");
@@ -602,7 +603,7 @@ export default function EnhancedTable() {
           {/* <Skeleton variant="rectangular"  height={118} animation="" /> */}
           <Paper elevation={3} sx={{ width: "100%", mb: 2, borderRadius: 1 }}>
             <div className="category-topbar-box ">
-              <h3 className=""> Brands</h3>
+              <h3 className=""> Blog Categories</h3>
               {/* <Button variant="contained"  startIcon={<Iconify icon="eva:plus-fill" />}> 
      Add Category
          </Button> */}
@@ -617,14 +618,6 @@ export default function EnhancedTable() {
                       handleClose={handleCloseEditMainCategorySideBar}
                     />
                   }
-                //  ComponentButton={
-                //     <Button
-                //       variant="contained"
-                //       startIcon={<Iconify icon="carbon:category" />}
-                //     >
-                //       Main Category
-                //     </Button>
-                //   }
                 />
                 {/*################ MAIN CATEGORY SIDEBAR BUTTON ################*/}
 
@@ -634,14 +627,14 @@ export default function EnhancedTable() {
                   toggleDrawerClose={handleCloseAddCategorySideBar}
                   toggleDrawerOpen={handleOpenAddCategorySidebar}
                   ComponentData={
-                    <AddBrand handleClose={handleCloseAddCategorySideBar} />
+                    <EditBlogsCategory handleClose={handleCloseAddCategorySideBar} />
                   }
                   ComponentButton={
                     <Button
                       variant="contained"
                       startIcon={<Iconify icon="eva:plus-fill" />}
                     >
-                      Add or edit Brands
+                      Add or edit Blog Categories
                     </Button>
                   }
                 />
@@ -669,7 +662,7 @@ export default function EnhancedTable() {
                   fullWidth
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  label="Search In Brands"
+                  label="Search In Blog Categories"
                   placeholder="Search Anything..."
                   variant="outlined"
                   InputProps={{
@@ -699,7 +692,7 @@ export default function EnhancedTable() {
                     id="demo-select-main-category"
                     select
                     value={filterMainCategory}
-                    label="Filter By Brands"
+                    label="Filter By Blog Categories"
                     onChange={(e) => handleFilterByMainCategory(e)}
                     style={{ textTransform: "capitalize" }}
                     SelectProps={{
@@ -880,7 +873,7 @@ export default function EnhancedTable() {
                           id="tableTitle"
                           component="div"
                         >
-                          Brands Not Found...
+                          Blog Categories Not Found...
                         </Typography>
                       </div>{" "}
                     </TableCell>

@@ -16,6 +16,9 @@ import MobileBanners from './pages/MobileBanners';
 import AvailableDoctors from './pages/AvailableDoctors';
 import Enquiry from "./pages/Enquiry"
 import WholesaleEnquiry from "./pages/WholesaleEnquiry"
+import BlogsPage from "./pages/BlogsPage"
+import BlogsCategory from "./pages/BlogsCategory"
+import Faqs from './pages/Faq'
 
 
 // ----------------------------------------------------------------------
@@ -39,9 +42,12 @@ export default function Router() {
      {/* <Route path="/dashboard/vendor" element={ <DashboardLayout Component={<Vendor/>} />}/> */}
      <Route path="/dashboard/categories" element={ <DashboardLayout Component={<Category/>} />} />
      <Route path="/dashboard/brands" element={ <DashboardLayout Component={<Brands/>} />} />
+     <Route path="/dashboard/blogs_categories" element={ <DashboardLayout Component={<BlogsCategory/>} />} />
+     <Route path="/dashboard/blogs" element={ <DashboardLayout Component={<BlogsPage/>} />} />
      <Route path="/dashboard/banners" element={ <DashboardLayout Component={<Banners/>} />} />
      <Route path="/dashboard/mobilebanners" element={ <DashboardLayout Component={<MobileBanners/>} />} />
-   
+     <Route path="/dashboard/faqs" element={ <DashboardLayout Component={<Faqs/>} />} />
+
       </Route>
        <Route exact path="/login" element={<LogoOnlyLayout Component={<Login/>} />   } />
        <Route exact path="*" element={<Navigate to="/login" />   } />

@@ -52,25 +52,26 @@ function EnquiryPreview(props) {
     </div>
     <div className='enquiry-content-box' > 
     <p className='enquiry-preview-detail' >Name : <span className='enquiry-details-preview-content' >{props?.previewData?.name} </span> </p>
-    <p className='enquiry-preview-detail' >Phone Number : <span className='enquiry-details-preview-content font-capitalize-case ' >+91-{props?.previewData?.phone_no}</span> </p>
-    <p className='enquiry-preview-detail' >Product Code : <span className='enquiry-details-preview-content' >{props?.previewData?.product_detail?.product_code}	</span> </p>
-    <p className='enquiry-preview-detail' >Product Name : <span className='enquiry-details-preview-content' >{props?.previewData?.product_detail?.product_name}</span> </p>
-    <p className='enquiry-preview-detail' >Date & Time : <span className='enquiry-details-preview-content' >{new Date(props?.previewData?.product_detail?.createdAt).getDate()}
+    <p className='enquiry-preview-detail' >Phone Number : <span className='enquiry-details-preview-content font-capitalize-case ' >{props?.previewData?.phone_no}</span> </p>
+    {/* <p className='enquiry-preview-detail' >Product Code : <span className='enquiry-details-preview-content' >{props?.previewData?.product_detail?.product_code}	</span> </p> */}
+    <p className='enquiry-preview-detail' >Product Name : <span className='enquiry-details-preview-content' >{props?.previewData?.medicine}</span> </p>
+    <p className='enquiry-preview-detail' >Source : <span className='enquiry-details-preview-content' >{props?.previewData?.form_source}</span> </p>
+    <p className='enquiry-preview-detail' >Date & Time : <span className='enquiry-details-preview-content' >{new Date(props?.previewData?.createdAt).getDate()}
     /
     {new Date(
-      props?.previewData?.product_detail?.createdAt
+      props?.previewData?.createdAt
     ).getMonth()}
     /
     {new Date(
-      props?.previewData?.product_detail?.createdAt
+      props?.previewData?.createdAt
     ).getFullYear()}
     -
     {new Date(
-      props?.previewData?.product_detail?.createdAt
+      props?.previewData?.createdAt
     ).getHours()}
     :
     {new Date(
-      props?.previewData?.product_detail?.createdAt
+      props?.previewData?.createdAt
     ).getMinutes()}</span> </p>
     <p className='enquiry-preview-detail' >Message : </p>
    <div className='enquiry-message-box' > <p className='enquiry-details-preview-content font-capitalize-case ' > {props?.previewData?.message} </p></div>

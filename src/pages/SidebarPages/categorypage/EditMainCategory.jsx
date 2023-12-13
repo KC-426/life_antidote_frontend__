@@ -94,6 +94,7 @@ const handleRemoveMainCategoryImage =async(mainCategoryObj,userselectedCategory)
  // ======================== HANDLE SAVE ======================== 
  const handleSubmit=async(e)=>{
   e.preventDefault()
+  console.log(userselectedCategory);
   let mainCategoryImageToFirebase;
   if(fileUpload){
    mainCategoryImageToFirebase=await uploadFileToFirebase(`/${process.env.REACT_APP_IMAGES_FOLDER_NAME}/allcategories/maincategories/${newMainCategory?.name}/`,fileUpload)
@@ -103,7 +104,7 @@ const handleRemoveMainCategoryImage =async(mainCategoryObj,userselectedCategory)
         main_category_slug:splitString(newMainCategory?.name),
         main_category_image:mainCategoryImageToFirebase
     }
-    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/update/all/main/category/?old_main_category_name=${userselectedCategory?.main_Catgeory}`,{...data},{withCredentials:true})
+    await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/api/update/all/main/category?old_main_category_name=${userselectedCategory?.main_Catgeory}`,{...data},{withCredentials:true})
     .then(res=>{
         console.log(res)
         setMessage((prev)=>({...prev,type:"success",message:"Updated Successfully !"}))
@@ -136,9 +137,10 @@ const handleCloseSnackbar = (event, reason) => {
 
 // ##################### ADD NEW MAIN CATEGORY #################
 const handleAddMainCategory=async(data)=>{
+  const trimmedData = data.trim();
   const addData ={
-    mainCategory:data,
-    main_category_slug:splitString(data)
+    mainCategory:trimmedData,
+    main_category_slug:splitString(trimmedData)
   }
   console.log("NEW MAIN CATEGORY DATA",addData)
   await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/create/maincategory`,{...addData},{withCredentials:true})
